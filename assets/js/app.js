@@ -237,6 +237,7 @@ function search() {
 
 function onSearchResponse(response) {
     showResponse(searchTerm);
+    console.log(searchTerm)
 }
   // add iframe to html
   // $('#ytNew').html(iframe);
