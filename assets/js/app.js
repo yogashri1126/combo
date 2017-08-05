@@ -223,7 +223,7 @@ $(document).on('click', '#newButton', function () {
           var results = response.result;
           $("#ytNew").html("");
           $.each(results.items, function(index, item) {
-            $.get("index.html", function(data) {
+            $.get("tpl.html", function(data) {
                 $("#ytNew").append(tplawesome(data, [{"title":item.snippet.title, "videoid":item.id.videoId}]));
             });
           });
