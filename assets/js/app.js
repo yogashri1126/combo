@@ -206,21 +206,18 @@ $(document).on('click', '#newButton', function () {
   searchNatureAPI(comment);
   // add search term to iframe format
   // var iframe = '<iframe id="ytplayer" type="text/html" width="720" height="405" src="https://www.youtube.com/embed/?listType=search&list=' + searchTerm + '"frameborder="0" allowfullscreen></iframe>';
-function tplawesome(e,t){res=e;for(var n=0;n<t.length;n++){res=res.replace(/\{\{(.*?)\}\}/g,function(e,r){return t[n][r]})}return res}
-
-$(function() {
-    $("#newButton").on('click', function(e) {
-       e.preventDefault();
-       // prepare the request
-       var request = gapi.client.youtube.search.list({
+ var request = gapi.client.youtube.search.list({
             part: "snippet",
             type: "video",
-            q: encodeURIComponent($('input').val().trim()).replace(/%20/g, "+"),
+            q: encodeURIComponent($("#search").val()).replace(/%20/g, "+"),
             maxResults: 1,
             order: "viewCount",
             publishedAfter: "2015-01-01T00:00:00Z"
-       }); 
-       // execute the request
+  // add iframe to html
+  // $('#ytNew').html(iframe);
+});
+
+        // execute the request
        request.execute(function(response) {
           var results = response.result;
           $("#ytNew").html("");
@@ -229,16 +226,15 @@ $(function() {
                 $("#ytNew").append(tplawesome(data, [{"title":item.snippet.title, "videoid":item.id.videoId}]));
             });
           });
-          resetVideoHeight();
+          // resetVideoHeight();
        });
     });
     
-    $(window).on("resize", resetVideoHeight);
-});
+//     $(window).on("resize", resetVideoHeight);
 
-function resetVideoHeight() {
-    $(".video").css("height", $("#ytNew").width() * 9/16);
-}
+// function resetVideoHeight() {
+//     $("#ytNew").css("height", "405px","width","720px");
+// }
 
 function init() {
     gapi.client.setApiKey("AIzaSyDZh8uYaoVKAcc9hYsRzC1o9HuQH3SwTYk");
@@ -246,9 +242,6 @@ function init() {
         // yt api is ready
     });
 }
-  // add iframe to html
-  // $('#ytNew').html(iframe);
-});
 
 // search natureAPI
 function searchNatureAPI (search) {
