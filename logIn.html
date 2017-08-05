@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>
+		Exemplar Log In
+	</title>
+	<link href="https://fonts.googleapis.com/css?family=Cinzel|Lemonada|Lobster" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <div class = "container">
+			<div class = "jumbotron">
+				<h1> Welcome to Exemplar App</h1>
+			</div>
+			<div class = "auth">
+				<h3 id = "signInHeader"> Please Sign In</h3>
+				<input id = "email" class="form-control" type = "email" placeholder ="Email"></input>
+				<input id = "password" class="form-control" type = "password" placeholder ="Password"></input>
+				<button class = "btn btn-primary" id = "login">Log In</button>
+				<button class = "btn btn-success" id = "signup">Sign Up</button>
+				<!-- <button class = "btn btn-primary" id = "logout">Log Out</button> -->
+				<button class = "btn btn-primary" id = "github">Log In with GitHub</button>
+			</div>
+		</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+
+	<script>
+
+
+////Firebase config input////////
+var config = {
+ apiKey: "AIzaSyBMspl9CpK0mjnwum55Jg1r8BH-E_YEt-k",
+ authDomain: "exemplar-eadfd.firebaseapp.com",
+ databaseURL: "https://exemplar-eadfd.firebaseio.com",
+ projectId: "exemplar-eadfd",
+ storageBucket: "exemplar-eadfd.appspot.com",
+ messagingSenderId: "200572986712"
+};
+firebase.initializeApp(config);
+
+//////Github account //////////////
+	var provider = new firebase.auth.GithubAuthProvider();
+
+	$("#github").on("click", function(event){
+	    event.preventDefault();
+	    firebase.auth().signInWithPopup(provider).then(function(result) {
+	  // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+	          var token = result.credential.accessToken;
+	  // The signed-in user info.
+	          var user = result.user;
+	          console.log(user);
+	  // ...
+	    }).catch(function(error) {
+	  // Handle Errors here.
+	          var errorCode = error.code;
+	          var errorMessage = error.message;
+	//   // The email of the user's account used.
+	           var email = error.email;
+	//   // The firebase.auth.AuthCredential type that was used.
+	           var credential = error.credential;
+	          console.log(errorMessage);
+	     });
+		 });
+
+//////////Listening Login with email and password////////
+			$("#login").on("click", function(){
+
+					var auth = firebase.auth();
+					var email = $("#email").val();
+					var pass = $("#password").val();
+					var promise = auth.signInWithEmailAndPassword(email, pass);
+					promise.catch(function(event){console.log(event.message+" deneme login");});
+			});
+
+///////New user signing in with new email and password. Creating Account/////////
+			$(document).on("click","#signup",signUp);
+
+/////////signup function creates a form with name lastname email password img form/////////
+						function signUp(){
+								event.preventDefault();
+								var divSign = $("<div id = 'divSign'>");
+								var name = $("<input type = 'text' placeholder = 'First Name'>");
+								name.addClass("form-control");
+								name.attr("id","name");
+
+								 var lastName = $("<input type = 'text' placeholder = 'Last Name'>");
+								 lastName.addClass("form-control");
+								 lastName.attr("id","lastName");
+								 divSign.insertAfter($("#signInHeader"));
+								 divSign.append(name);
+								 divSign.append(lastName);
+
+
+								var label = $("<label for = 'imgFile'>" )
+											label.text("Image File");
+								var file = $("<input type = 'file' aria-describedby='fileHelp'>");
+											file.addClass("form-control-file");
+											file.attr("id","imgFile");
+								label.insertAfter(lastName);
+		 						file.insertAfter(label);
+								$("#login").remove();
+								$("#github").remove();
+								$("#signup").remove();
+								var buttonSignUp = $("<button class = 'btn btn-success' id = 'submitAccount'>");
+								buttonSignUp.text("Submit");
+								buttonSignUp.insertAfter($("#password"));
+    			}
+
+
+/////////Submitting form to sign up clicking button.... all user info is stored in firebase with specific UID/////////
+		$(document).on("click","#submitAccount", account);
+
+		function account(){
+
+			   	 event.preventDefault();
+					 var auth = firebase.auth();
+					 var users = {
+							email: $("#email").val(),
+							pass: $("#password").val()
+					 };
+
+					 //////////Calling firebase method to create user account with email an password///////////
+						auth.createUserWithEmailAndPassword(users.email, users.pass).catch(function(error) {
+									  // Handle Errors
+									  var errorCode = error.code;
+									  var errorMessage = error.message;
+									  console.log(errorCode);
+										console.log(errorMessage);
+									}).then(function(response) {
+
+								/////saving user info on firebase////////////////
+			          var database = firebase.database();
+								firebase.database().ref("users/"+response.uid).set({
+			         	email: users.email,
+								pass: users.pass,
+			         	displayName: $("#name").val(),
+								lastName: $("#lastName").val(),
+								paperTitle: "",
+								paperTime: "",
+								imgUrl: $("#imgFile").val()
+			      });
+
+			});
+
+}
+////////event listenner whenever there is a change of Auth State signing in or signing up////////
+			firebase.auth().onAuthStateChanged(function(user){
+
+				if(user){
+				///////if user signed in or singed up updating user account properties///////
+					user.updateProfile({
+        				displayName: $("#name").val(),
+								photoURL: $("#imgFile").val()
+				    		}).then(function() {
+				        console.log("Update is successfull");
+								/////directing to index.html page//////////
+								window.location = "index.html";
+				    		}, function(error) {
+				        console.log("not able to update user info");
+				    		});
+						////updated user info//////////
+						console.log(user);
+				}
+				else {
+					console.log("not logged in");
+				}
+			});
+
+	</script>
+</body>
+</html>

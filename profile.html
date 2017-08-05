@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>
+		Exemplar Profile
+	</title>
+	<link href="https://fonts.googleapis.com/css?family=Cinzel|Lemonada|Lobster" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style = "border-bottom: 1px solid gray;">
+
+				<form class="navbar-form navbar-left">
+					<img src="assets/css/brazil.jpg" alt="" style="width:40px; height:40px;">
+					<span> Exemplar </span>
+					<div class="form-group">
+					<label for="input"></label>
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button id="newButton"  type="submit" class="btn btn-default">optoins</button>
+					<div class="btn-group">
+						<button type="button" class="btn btn-secondary dropdown-toggle"> <a class="dropdown-item" href="index.html">MAIN PAGE</a> </button>
+						</button>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary dropdown-toggle logout">options</button>
+
+						</button>
+					</div>
+				</form>
+			</div>
+<div class = "container">
+<div class = "row">
+
+
+	<div class = "col-md-4">
+		<br><br><br><br><br>
+			<h2> Account Name </h2><br>
+			<img src="assets/css/brazil.jpg" alt=""  style="width:180px; height:180px;"> <br><br><br><br>
+			<h3 style = "border-bottom: 1px solid gray;"> work </h3><br><br><br><br>
+			<h3 style = "border-bottom: 1px solid gray;"> Skils </h3>
+	</div>
+
+
+			<div class = "col-md-8">
+<br><br><br><br><br>
+						<h2> name of user </h2> <br><br><br><br><br>
+						<button type="button" class="btn btn-primary"> Send Message</button>
+						<button type="button" class="btn btn-primary"> Contacts</button>
+						<button type="button" class="btn btn-primary"> More Option</button><br><br><br><br><br><br><br><br><br><br>
+
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+							<form class="navbar-form navbar-left">
+
+
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary">
+										About Me
+									</button>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary dropdown-toggle logout">
+										Papers
+									</button>
+								</div>
+							</form>
+						</div>
+
+			</div>
+
+		</div>
+</div>
+
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+
+	<script>
+
+
+////Firebase config input////////
+var config = {
+ apiKey: "AIzaSyBMspl9CpK0mjnwum55Jg1r8BH-E_YEt-k",
+ authDomain: "exemplar-eadfd.firebaseapp.com",
+ databaseURL: "https://exemplar-eadfd.firebaseio.com",
+ projectId: "exemplar-eadfd",
+ storageBucket: "exemplar-eadfd.appspot.com",
+ messagingSenderId: "200572986712"
+};
+firebase.initializeApp(config);
+
+////////event listenner whenever there is a change of Auth State signing in or signing up////////
+			firebase.auth().onAuthStateChanged(function(user){
+
+				if(user){
+				///////if user signed in or singed up updating user account properties///////
+						console.log(user);
+				}
+				else {
+					console.log("not logged in");
+				}
+			});
+
+	</script>
+</body>
+</html>
