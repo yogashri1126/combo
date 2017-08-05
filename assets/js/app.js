@@ -209,6 +209,7 @@ $(document).on('click', '#newButton', function () {
   function showResponse(response) {
     var responseString = JSON.stringify(response, '', 2);
     document.getElementById('ytNew').innerHTML += responseString;
+    console.log(responseString)
 }
 
 function onClientLoad() {
@@ -231,6 +232,7 @@ function search() {
     });
     
     request.execute(onSearchResponse);
+    console.log(onSearchResponse)
 }
 
 function onSearchResponse(response) {
