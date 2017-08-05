@@ -212,6 +212,7 @@ $(document).on('click', '#newButton', function () {
             q: encodeURIComponent($('input').val().trim()).replace(/%20/g, "+"),
             maxResults: 1,
             order: "relevance",
+            topicId: "/m/01k8wb"
             publishedAfter: "2015-01-01T00:00:00Z"
   // add iframe to html
   // $('#ytNew').html(iframe);
