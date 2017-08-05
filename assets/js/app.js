@@ -213,7 +213,7 @@ $(document).on('click', '#newButton', function () {
             maxResults: 1,
             order: "relevance",
             topicId: "/m/01k8wb",
-            safeSearch: "strict"
+            safeSearch: "strict",
             publishedAfter: "2015-01-01T00:00:00Z"
   // add iframe to html
   // $('#ytNew').html(iframe);
