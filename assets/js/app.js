@@ -218,7 +218,7 @@ $(document).on('click', '#newButton', function () {
   // add iframe to html
   // $('#ytNew').html(iframe);
 });
-
+ console.log(request);
         // execute the request
       function tplawesome(e,t){res=e;for(var n=0;n<t.length;n++){res=res.replace(/\{\{(.*?)\}\}/g,function(e,r){return t[n][r]})}return res}
        request.execute(function(response) {
