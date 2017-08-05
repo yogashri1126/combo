@@ -206,38 +206,45 @@ $(document).on('click', '#newButton', function () {
   searchNatureAPI(comment);
   // add search term to iframe format
   // var iframe = '<iframe id="ytplayer" type="text/html" width="720" height="405" src="https://www.youtube.com/embed/?listType=search&list=' + searchTerm + '"frameborder="0" allowfullscreen></iframe>';
-  function showResponse(response) {
-    var responseString = JSON.stringify(response, '', 2);
-    document.getElementById('ytNew').innerHTML += responseString;
-    console.log(responseString)
-}
+function tplawesome(e,t){res=e;for(var n=0;n<t.length;n++){res=res.replace(/\{\{(.*?)\}\}/g,function(e,r){return t[n][r]})}return res}
 
-function onClientLoad() {
-    gapi.client.load('youtube', 'v3', onYouTubeApiLoad);
-}
-
-
-function onYouTubeApiLoad() {
-    // PUT YOUR API KEY HERE.
-    gapi.client.setApiKey('AIzaSyCR5In4DZaTP6IEZQ0r1JceuvluJRzQNLE');
-
-    search();
-}
-
-function search() {
-    // Use the JavaScript client library to create a search.list() API call.
-    var request = gapi.client.youtube.search.list({
-        part: 'snippet',
-        part: 'q'
+$(function() {
+    $("form").on("submit", function(e) {
+       e.preventDefault();
+       // prepare the request
+       var request = gapi.client.youtube.search.list({
+            part: "snippet",
+            type: "video",
+            q: encodeURIComponent($("#search").val()).replace(/%20/g, "+"),
+            maxResults: 1,
+            order: "viewCount",
+            publishedAfter: "2015-01-01T00:00:00Z"
+       }); 
+       // execute the request
+       request.execute(function(response) {
+          var results = response.result;
+          $("#ytNew").html("");
+          $.each(results.items, function(index, item) {
+            $.get("item.html", function(data) {
+                $("#ytNew").append(tplawesome(data, [{"title":item.snippet.title, "videoid":item.id.videoId}]));
+            });
+          });
+          resetVideoHeight();
+       });
     });
     
-    request.execute(onSearchResponse);
-    console.log(onSearchResponse)
+    $(window).on("resize", resetVideoHeight);
+});
+
+function resetVideoHeight() {
+    $(".video").css("height", $("#ytNew").width() * 9/16);
 }
 
-function onSearchResponse(response) {
-    showResponse(searchTerm);
-    console.log(searchTerm)
+function init() {
+    gapi.client.setApiKey("AIzaSyDZh8uYaoVKAcc9hYsRzC1o9HuQH3SwTYk");
+    gapi.client.load("youtube", "v3", function() {
+        // yt api is ready
+    });
 }
   // add iframe to html
   // $('#ytNew').html(iframe);
