@@ -211,7 +211,7 @@ $(document).on('click', '#newButton', function () {
             type: "video",
             q: encodeURIComponent($('input').val().trim()).replace(/%20/g, "+"),
             maxResults: 1,
-            order: "viewCount",
+            order: "relevance",
             publishedAfter: "2015-01-01T00:00:00Z"
   // add iframe to html
   // $('#ytNew').html(iframe);
